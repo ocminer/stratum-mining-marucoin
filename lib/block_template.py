@@ -51,7 +51,7 @@ class BlockTemplate(halfnode.CBlock):
            coinbase = self.coinbase_transaction_class(self.timestamper, self.coinbaser, data['coinbasevalue'], data['charityvalue'], data['coinbaseaux']['flags'], data['height'], 
 			settings.COINBASE_EXTRAS)
 	else:
-	    coinbase = self.coinbase_transaction_class(self.timestamper, self.coinbaser, data['coinbasevalue'], data['coinbaseaux']['flags'], data['height'],
+	    coinbase = self.coinbase_transaction_class(self.timestamper, self.coinbaser, data['coinbasevalue'], data['charityvalue'], data['coinbaseaux']['flags'], data['height'],
                         settings.COINBASE_EXTRAS, data['curtime'])
 
         self.height = data['height']
