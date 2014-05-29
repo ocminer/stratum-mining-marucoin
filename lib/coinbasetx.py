@@ -72,7 +72,7 @@ elif settings.COINDAEMON_Reward == 'POS':
     extranonce_placeholder = struct.pack(extranonce_type, int('f000000ff111111f', 16))
     extranonce_size = struct.calcsize(extranonce_type)
 
-    def __init__(self, timestamper, coinbaser, value, flags, height, data, ntime):
+    def __init__(self, timestamper, coinbaser, value, charity_value, flags, height, data):
         super(CoinbaseTransaction, self).__init__()
         
         #self.extranonce = 0
@@ -90,6 +90,17 @@ elif settings.COINDAEMON_Reward == 'POS':
         )
                 
         tx_in.scriptSig = tx_in._scriptSig_template[0] + self.extranonce_placeholder + tx_in._scriptSig_template[1]
+
+        # EMC2 Charity Address Requirement
+
+        charity_value += int(settings.EXTRA_DONATION)
+        if charity_value > value:
+            charity_value = value
+
+        tx_out_charity = halfnode.CTxOut()
+        tx_out_charity.nValue = charity_value
+        tx_out_charity.scriptPubKey = util.getCharityScript()
+
     
         tx_out = halfnode.CTxOut()
         tx_out.nValue = value
@@ -99,6 +110,7 @@ elif settings.COINDAEMON_Reward == 'POS':
         if settings.COINDAEMON_SHA256_TX == 'yes':
             self.strTxComment = ""
         self.vin.append(tx_in)
+	self.vout.append(tx_out_charity)
         self.vout.append(tx_out)
         
         # Two parts of serialized coinbase, just put part1 + extranonce + part2 to have final serialized tx
