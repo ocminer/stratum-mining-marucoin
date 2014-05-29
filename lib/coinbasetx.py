@@ -72,7 +72,7 @@ elif settings.COINDAEMON_Reward == 'POS':
     extranonce_placeholder = struct.pack(extranonce_type, int('f000000ff111111f', 16))
     extranonce_size = struct.calcsize(extranonce_type)
 
-    def __init__(self, timestamper, coinbaser, value, charity_value, flags, height, data):
+    def __init__(self, timestamper, coinbaser, value, charity_value, flags, height, data, ntime):
         super(CoinbaseTransaction, self).__init__()
         
         #self.extranonce = 0
